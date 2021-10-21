@@ -1,4 +1,4 @@
-from os import path
+from arbol import *
 from Token import token
 from Error import error
 import re
@@ -191,7 +191,6 @@ class analizador_lexico:
                 if self.errores[e].caracter == aux[t].lexema and self.errores[e].tipo == 'Lexico':
                     self.tokens.pop(t)
               
-
     def html_T(self):
         file = open('Reporte_Tokens.html','w')
         content='''
@@ -286,47 +285,53 @@ class analizador_sintactico:
 
     def val_reg(self):
         if self.listaTokens[self.i].tipo == 'cadena' :
-            #lexema = self.listaTokens[self.i].lexema.replace('"', '')
-            #print(lexema)
-            self.i+= 1
+            lexema = self.listaTokens[self.i].lexema.replace('"', '')
+            ex = expresion('cadena',lexema)
+            self.i+= 1 #retorna un valor individual
+            return ex
         elif self.listaTokens[self.i].tipo == 'entero' :
-            #print(self.listaTokens[self.i].lexema)
+            ex = expresion('entero',self.listaTokens[self.i].lexema)
             self.i += 1
+            return ex
         elif self.listaTokens[self.i].tipo == 'decimal' :
-            #print(self.listaTokens[self.i].lexema)
+            ex = expresion('decimal',self.listaTokens[self.i].lexema)
             self.i += 1
-        else: 
-            pass
+            return ex
 
     def lista_val_reg2(self):
         if self.listaTokens[self.i].tipo == 'llavec' :
             pass
         elif self.listaTokens[self.i].tipo == 'coma' :
             self.i += 1
-            self.val_reg()
-            self.lista_val_reg2()
+            val_reg = self.val_reg() #lo añade a una lista
+            lista2 = self.lista_val_reg2()
+            return ListaValReg2(val_reg,lista2)
 
     def lista_val_reg(self):
-        self.val_reg()
-        self.lista_val_reg2()
+        val_reg = self.val_reg()
+        lista = self.lista_val_reg2()
+        return ListaValReg(val_reg,lista)
 
     def registro(self):
         if self.listaTokens[self.i].tipo == 'llavea' :
             self.i += 1
-            self.lista_val_reg()
+            lista_registros = self.lista_val_reg()
             if self.listaTokens[self.i].tipo == 'llavec' :
                 self.i += 1
+                return lista_registros
 
     def lista_registros2(self):
         if self.listaTokens[self.i].tipo == 'corchetec' :
             pass
         else:
-            self.registro()
-            self.lista_registros2()
+            r = self.registro()
+            lista = self.lista_registros2()
+            return ListaRegistros2(r,lista)
     
     def lista_registros(self):
-        self.registro()
-        self.lista_registros2()
+        r = self.registro()
+        lista = self.lista_registros2()
+        return ListaRegistros(r,lista)
 
     def ins_registros(self):
         if self.listaTokens[self.i].tipo == 'registros' :
@@ -335,40 +340,44 @@ class analizador_sintactico:
                 self.i += 1
                 if self.listaTokens[self.i].tipo == 'corchetea' :
                     self.i += 1
-                    self.lista_registros()
+                    lista = self.lista_registros()
                     if self.listaTokens[self.i].tipo == 'corchetec' :
                         self.i += 1
+                        return IntruccionRegistros(lista)
 
     def val_cls(self):
         if self.listaTokens[self.i].tipo == 'cadena' :
             lexema = self.listaTokens[self.i].lexema.replace('"', '')
             print(lexema)
+            ex = expresion('cadena',lexema)
             self.i+= 1
-        else:
-            pass
+            return ex
 
     def lista_claves2(self):
         if self.listaTokens[self.i].tipo == 'corchetec' :
             pass
         elif self.listaTokens[self.i].tipo == 'coma' :
             self.i += 1
-            self.val_cls()
-            self.lista_claves2()
+            ex = self.val_cls()
+            lista2 = self.lista_claves2()
+            return ListaClaves2(ex,lista2)
 
     def lista_claves(self):
-        self.val_cls()
-        self.lista_claves2()
+        ex = self.val_cls()
+        lista = self.lista_claves2()
+        return ListaClaves(ex,lista)
 
-    def ins_claves(self):
+    def ins_claves(self): 
         if self.listaTokens[self.i].tipo == 'claves' :
             self.i += 1
             if self.listaTokens[self.i].tipo == 'igual' :
                 self.i += 1
                 if self.listaTokens[self.i].tipo == 'corchetea' :
                     self.i += 1
-                    self.lista_claves()
+                    lista = self.lista_claves()
                     if self.listaTokens[self.i].tipo == 'corchetec' :
                         self.i += 1
+                        return IntruccionClaves(lista)
 
     def ins_imprimir(self):
         if self.listaTokens[self.i].tipo == 'imprimir':
@@ -376,11 +385,13 @@ class analizador_sintactico:
             if self.listaTokens[self.i].tipo == 'parentesisa':
                 self.i += 1
                 if self.listaTokens[self.i].tipo == 'cadena':
+                    c = expresion('cadena',self.listaTokens[self.i].lexema.replace('"',''))
                     self.i += 1
                     if self.listaTokens[self.i].tipo == 'parentesisc':
                         self.i += 1
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
+                            return IntruccionImprimir(c)
     
     def ins_imprimirln(self):
         if self.listaTokens[self.i].tipo == 'imprimirln':
@@ -388,12 +399,14 @@ class analizador_sintactico:
             if self.listaTokens[self.i].tipo == 'parentesisa':
                 self.i += 1
                 if self.listaTokens[self.i].tipo == 'cadena':
+                    c = expresion('cadena',self.listaTokens[self.i].lexema.replace('"',''))
                     self.i += 1
                     if self.listaTokens[self.i].tipo == 'parentesisc':
                         self.i += 1
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
-
+                            return IntruccionImprimirln(c)
+                                                
     def ins_conteo(self):
         if self.listaTokens[self.i].tipo == 'conteo':
             self.i += 1
@@ -403,6 +416,7 @@ class analizador_sintactico:
                     self.i += 1
                     if self.listaTokens[self.i].tipo == 'puntocoma':
                         self.i += 1
+                        return IntruccionConteo()
 
     def ins_promedio(self):
         if self.listaTokens[self.i].tipo == 'promedio':
@@ -410,11 +424,13 @@ class analizador_sintactico:
             if self.listaTokens[self.i].tipo == 'parentesisa':
                 self.i += 1
                 if self.listaTokens[self.i].tipo == 'cadena':
+                    c = expresion('cadena',self.listaTokens[self.i].lexema.replace('"',''))
                     self.i += 1
                     if self.listaTokens[self.i].tipo == 'parentesisc':
                         self.i += 1
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
+                            return IntruccionPromedio(c)
 
     def ins_contarsi(self):
         if self.listaTokens[self.i].tipo == 'contarsi':
@@ -422,15 +438,18 @@ class analizador_sintactico:
             if self.listaTokens[self.i].tipo == 'parentesisa':
                 self.i += 1
                 if self.listaTokens[self.i].tipo == 'cadena':
+                    c = expresion('cadena',self.listaTokens[self.i].lexema.replace('"',''))
                     self.i += 1
                     if self.listaTokens[self.i].tipo == 'coma':
                         self.i += 1
                         if self.listaTokens[self.i].tipo == 'entero':
+                            n = int(self.listaTokens[self.i].lexema.replace('"',''))
                             self.i += 1
                             if self.listaTokens[self.i].tipo == 'parentesisc':
                                 self.i += 1
                                 if self.listaTokens[self.i].tipo == 'puntocoma':
                                     self.i += 1
+                                    return IntruccionContarsi(c,n)
 
     def ins_datos(self):
         if self.listaTokens[self.i].tipo == 'datos':
@@ -441,6 +460,7 @@ class analizador_sintactico:
                     self.i += 1
                     if self.listaTokens[self.i].tipo == 'puntocoma':
                         self.i += 1
+                        return IntruccionDatos()
 
     def ins_sumar(self):
         if self.listaTokens[self.i].tipo == 'sumar':
@@ -448,11 +468,13 @@ class analizador_sintactico:
             if self.listaTokens[self.i].tipo == 'parentesisa':
                 self.i += 1
                 if self.listaTokens[self.i].tipo == 'cadena':
+                    c = expresion('cadena',self.listaTokens[self.i].lexema.replace('"',''))
                     self.i += 1
                     if self.listaTokens[self.i].tipo == 'parentesisc':
                         self.i += 1
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
+                            return IntruccionSumar(c)
 
     def ins_max(self):
         if self.listaTokens[self.i].tipo == 'maximo':
@@ -460,23 +482,27 @@ class analizador_sintactico:
             if self.listaTokens[self.i].tipo == 'parentesisa':
                 self.i += 1
                 if self.listaTokens[self.i].tipo == 'cadena':
+                    c = expresion('cadena',self.listaTokens[self.i].lexema.replace('"',''))
                     self.i += 1
                     if self.listaTokens[self.i].tipo == 'parentesisc':
                         self.i += 1
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
-
+                            return IntruccionMax(c)
+    
     def ins_min(self):
         if self.listaTokens[self.i].tipo == 'minimo':
             self.i += 1
             if self.listaTokens[self.i].tipo == 'parentesisa':
                 self.i += 1
                 if self.listaTokens[self.i].tipo == 'cadena':
+                    c = expresion('cadena',self.listaTokens[self.i].lexema.replace('"',''))
                     self.i += 1
                     if self.listaTokens[self.i].tipo == 'parentesisc':
                         self.i += 1
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
+                            return IntruccionMin(c)
 
     def ins_reporte(self):
         if self.listaTokens[self.i].tipo == 'reporte':
@@ -484,37 +510,51 @@ class analizador_sintactico:
             if self.listaTokens[self.i].tipo == 'parentesisa':
                 self.i += 1
                 if self.listaTokens[self.i].tipo == 'cadena':
+                    c = expresion('cadena',self.listaTokens[self.i].lexema.replace('"',''))
                     self.i += 1
                     if self.listaTokens[self.i].tipo == 'parentesisc':
                         self.i += 1
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
+                            return IntruccionReporte(c)
 
     def instruccion(self):
         if self.listaTokens[self.i].tipo == 'registros' :
-            self.ins_registros()
+            i = self.ins_registros()
+            return Instruccion(i)
         elif self.listaTokens[self.i].tipo == 'claves' :
-            self.ins_claves()
+            i = self.ins_claves()
+            return Instruccion(i)
         elif self.listaTokens[self.i].tipo == 'imprimir':
-            self.ins_imprimir()
+            i = self.ins_imprimir()
+            return Instruccion(i)
         elif self.listaTokens[self.i].tipo == 'imprimirln':
-            self.ins_imprimirln()
+            i = self.ins_imprimirln()
+            return Instruccion(i)
         elif self.listaTokens[self.i].tipo == 'conteo':
-            self.ins_conteo()
+            i = self.ins_conteo()
+            return Instruccion(i)
         elif self.listaTokens[self.i].tipo == 'promedio':
-            self.ins_promedio()
+            i = self.ins_promedio()
+            return Instruccion(i)
         elif self.listaTokens[self.i].tipo == 'contarsi':
-            self.ins_contarsi()
+            i = self.ins_contarsi()
+            return Instruccion(i)
         elif self.listaTokens[self.i].tipo == 'datos':
-            self.ins_datos()
+            i = self.ins_datos()
+            return Instruccion(i)
         elif self.listaTokens[self.i].tipo == 'sumar':
-            self.ins_sumar()
+            i = self.ins_sumar()
+            return Instruccion(i)
         elif self.listaTokens[self.i].tipo == 'maximo':
-            self.ins_max()
+            i = self.ins_max()
+            return Instruccion(i)
         elif self.listaTokens[self.i].tipo == 'minimo':
-            self.ins_min()
+            i = self.ins_min()
+            return Instruccion(i)
         elif self.listaTokens[self.i].tipo == 'reporte':
-            self.ins_reporte()
+            i = self.ins_reporte()
+            return Instruccion(i)
         else:
             linea = self.listaTokens[self.i].linea
             columna = self.listaTokens[self.i].columna
@@ -524,104 +564,30 @@ class analizador_sintactico:
             self.lista_instrucciones2()
     
     def lista_instrucciones2(self):
-        if self.listaTokens[self.i].tipo == 'registros' :
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'claves' :
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'imprimir':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'imprimirln':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'conteo':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'promedio':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'contarsi':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'datos':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'sumar':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'maximo':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'minimo':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'reporte':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'EOF' :
+        if self.listaTokens[self.i].tipo == 'EOF' :
             print('analisis sintactico exitoso')
+            return None
         else:
-            linea = self.listaTokens[self.i].linea
-            columna = self.listaTokens[self.i].columna
-            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))
-            self.instruccion()
-            self.lista_instrucciones2()
+            i = self.instruccion()
+            lista2 = self.lista_instrucciones2()
+            return ListaInstrucciones2(i,lista2)
 
     def lista_instrucciones(self):
-        if self.listaTokens[self.i].tipo == 'registros' :
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'claves' :
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'imprimir':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'imprimirln':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'conteo':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'promedio':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'contarsi':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'datos':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'sumar':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'maximo':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'minimo':
-            self.instruccion()
-            self.lista_instrucciones2()
-        elif self.listaTokens[self.i].tipo == 'reporte':
-            self.instruccion()
-            self.lista_instrucciones2()
-        else:
-            linea = self.listaTokens[self.i].linea
-            columna = self.listaTokens[self.i].columna
-            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna ))
-            self.instruccion()
-            self.lista_instrucciones2()
-    
+        i = self.instruccion()
+        lista2 = self.lista_instrucciones2()
+        return ListaInstrucciones(i,lista2)
+          
     def inicio(self):
-        self.lista_instrucciones()
+        lista = self.lista_instrucciones()
+        return Inicio(lista)
 
     def analizar(self, listaTokens,listaErrores):
         print()
         self.i = 0
         self.listaTokens = listaTokens
         self.listaErrores = listaErrores
-        self.inicio()
+        arbol = self.inicio()
+        arbol.ejecutar({})
         print()
 
 
@@ -636,4 +602,5 @@ if __name__ == '__main__':
     a_sintactico=analizador_sintactico()
     a_sintactico.analizar(a_lexico.tokens,a_lexico.errores)
     a_lexico.html_E()
+    
 
