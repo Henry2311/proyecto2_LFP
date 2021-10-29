@@ -1,8 +1,20 @@
+from os import startfile
 from claves import claves
-
+from graphviz import Graph
 clvs = []
 regs = []
 consola = ''
+
+dot = Graph('arbol', 'png')
+dot.format = 'pdf'
+dot.attr(splines = 'false')
+dot.node_attr.update(shape = 'circle')
+dot.edge_attr.update(color = 'black')
+i = 0
+def start():
+    global i
+    i += 1
+    return i
 
 class expresion:
     def __init__(self, tipo, valor) :
@@ -11,6 +23,22 @@ class expresion:
 
     def getValor(self, entorno):
         return self.valor
+
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, 'expresion')
+        
+        idlit = str(start())
+        dot.node(idlit, 'literal')
+
+        idexp = str(start())
+        dot.node(idexp, self.valor)
+
+        dot.edge(idlit, idexp)
+        dot.edge(idnodo, idlit)
+
+        return idnodo
 
 class IntruccionPromedio() :
     def __init__(self, expresion) :
@@ -30,7 +58,34 @@ class IntruccionPromedio() :
                 promedio=round(promedio/len(clvs[i].valores),2)
         
         print(str(promedio))
-        consola+='\n'+str(promedio)+'\n'      
+        consola+='\n'+str(promedio)+'\n'   
+
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "INS_PROMEDIO")
+
+        idclaves = str(start())
+        dot.node(idclaves, "promedio")
+
+        idparentesis = str(start())
+        dot.node(idparentesis, "(")
+        
+        hijo = self.expresion.getNodos()
+
+        idparentesisc = str(start())
+        dot.node(idparentesisc, ")")
+
+        idpuntocoma = str(start())
+        dot.node(idpuntocoma, ";")        
+
+        dot.edge(idnodo, idclaves)
+        dot.edge(idnodo, idparentesis)
+        dot.edge(idnodo,hijo)
+        dot.edge(idnodo, idparentesisc)
+        dot.edge(idnodo, idpuntocoma)
+
+        return idnodo   
 
 class IntruccionContarsi() :
     def __init__(self, expresion,indice) :
@@ -49,6 +104,41 @@ class IntruccionContarsi() :
 
         print(contar)
         consola+='\n'+str(contar)+'\n'
+
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "INS_CONTARSI")
+
+        idclaves = str(start())
+        dot.node(idclaves, "contarsi")
+
+        idparentesis = str(start())
+        dot.node(idparentesis, "(")
+        
+        hijo = self.expresion.getNodos()
+
+        idcoma =str(start())
+        dot.node(idcoma,",")
+
+        idindice = str(start())
+        dot.node(idindice,str(self.indice))
+
+        idparentesisc = str(start())
+        dot.node(idparentesisc, ")")
+
+        idpuntocoma = str(start())
+        dot.node(idpuntocoma, ";")        
+
+        dot.edge(idnodo, idclaves)
+        dot.edge(idnodo, idparentesis)
+        dot.edge(idnodo,hijo)
+        dot.edge(idnodo,idcoma)
+        dot.edge(idnodo,idindice)
+        dot.edge(idnodo, idparentesisc)
+        dot.edge(idnodo, idpuntocoma)
+
+        return idnodo
 
 class IntruccionDatos() :
     def __init__(self) :
@@ -84,6 +174,30 @@ class IntruccionDatos() :
         
         return tabla
 
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "INS_DATOS")
+
+        idclaves = str(start())
+        dot.node(idclaves, "datos")
+
+        idparentesis = str(start())
+        dot.node(idparentesis, "(")
+        
+        idparentesisc = str(start())
+        dot.node(idparentesisc, ")")
+
+        idpuntocoma = str(start())
+        dot.node(idpuntocoma, ";")        
+
+        dot.edge(idnodo, idclaves)
+        dot.edge(idnodo, idparentesis)
+        dot.edge(idnodo, idparentesisc)
+        dot.edge(idnodo, idpuntocoma)
+
+        return idnodo
+
 class IntruccionSumar() :
     def __init__(self, expresion) :
         self.expresion = expresion
@@ -102,6 +216,33 @@ class IntruccionSumar() :
         print(str(suma)) 
         consola+='\n'+str(suma)+'\n' 
 
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "INS_SUMAR")
+
+        idclaves = str(start())
+        dot.node(idclaves, "sumar")
+
+        idparentesis = str(start())
+        dot.node(idparentesis, "(")
+        
+        hijo = self.expresion.getNodos()
+
+        idparentesisc = str(start())
+        dot.node(idparentesisc, ")")
+
+        idpuntocoma = str(start())
+        dot.node(idpuntocoma, ";")        
+
+        dot.edge(idnodo, idclaves)
+        dot.edge(idnodo, idparentesis)
+        dot.edge(idnodo,hijo)
+        dot.edge(idnodo, idparentesisc)
+        dot.edge(idnodo, idpuntocoma)
+
+        return idnodo
+
 class IntruccionMax() :
     def __init__(self, expresion) :
         self.expresion = expresion
@@ -117,7 +258,34 @@ class IntruccionMax() :
                 max=sorted(clvs[i].valores,reverse=True)
         
         print(str(max[0]))
-        consola+='\n'+str(max[0])+'\n'  
+        consola+='\n'+str(max[0])+'\n' 
+
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "INS_MAX")
+
+        idclaves = str(start())
+        dot.node(idclaves, "maximo")
+
+        idparentesis = str(start())
+        dot.node(idparentesis, "(")
+        
+        hijo = self.expresion.getNodos()
+
+        idparentesisc = str(start())
+        dot.node(idparentesisc, ")")
+
+        idpuntocoma = str(start())
+        dot.node(idpuntocoma, ";")        
+
+        dot.edge(idnodo, idclaves)
+        dot.edge(idnodo, idparentesis)
+        dot.edge(idnodo,hijo)
+        dot.edge(idnodo, idparentesisc)
+        dot.edge(idnodo, idpuntocoma)
+
+        return idnodo 
 
 class IntruccionMin() :
     def __init__(self, expresion) :
@@ -135,6 +303,33 @@ class IntruccionMin() :
         
         print(str(min[0]))
         consola+='\n'+str(min[0])+'\n'
+
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "INS_MIN")
+
+        idclaves = str(start())
+        dot.node(idclaves, "minimo")
+
+        idparentesis = str(start())
+        dot.node(idparentesis, "(")
+        
+        hijo = self.expresion.getNodos()
+
+        idparentesisc = str(start())
+        dot.node(idparentesisc, ")")
+
+        idpuntocoma = str(start())
+        dot.node(idpuntocoma, ";")        
+
+        dot.edge(idnodo, idclaves)
+        dot.edge(idnodo, idparentesis)
+        dot.edge(idnodo,hijo)
+        dot.edge(idnodo, idparentesisc)
+        dot.edge(idnodo, idpuntocoma)
+
+        return idnodo
 
 class IntruccionReporte() :
     def __init__(self, expresion) :
@@ -206,6 +401,34 @@ class IntruccionReporte() :
         content+='</body>\n</html>'
         file.write(content)
         file.close()
+        startfile(name+'.html')
+
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "INS_REPORTE")
+
+        idclaves = str(start())
+        dot.node(idclaves, "reporte")
+
+        idparentesis = str(start())
+        dot.node(idparentesis, "(")
+        
+        hijo = self.expresion.getNodos()
+
+        idparentesisc = str(start())
+        dot.node(idparentesisc, ")")
+
+        idpuntocoma = str(start())
+        dot.node(idpuntocoma, ";")        
+
+        dot.edge(idnodo, idclaves)
+        dot.edge(idnodo, idparentesis)
+        dot.edge(idnodo,hijo)
+        dot.edge(idnodo, idparentesisc)
+        dot.edge(idnodo, idpuntocoma)
+
+        return idnodo
 
 class IntruccionConteo() :
     def __init__(self) :
@@ -217,6 +440,30 @@ class IntruccionConteo() :
         valor = self.expresion.getValor(entorno)+len(regs)
         print(valor)
         consola+='\n'+str(valor)+'\n'
+
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "INS_CONTEO")
+
+        idclaves = str(start())
+        dot.node(idclaves, "conteo")
+
+        idparentesis = str(start())
+        dot.node(idparentesis, "(")
+        
+        idparentesisc = str(start())
+        dot.node(idparentesisc, ")")
+
+        idpuntocoma = str(start())
+        dot.node(idpuntocoma, ";")        
+
+        dot.edge(idnodo, idclaves)
+        dot.edge(idnodo, idparentesis)
+        dot.edge(idnodo, idparentesisc)
+        dot.edge(idnodo, idpuntocoma)
+
+        return idnodo
 
 class IntruccionClaves() :
     def __init__(self, expresion) :
@@ -230,6 +477,32 @@ class IntruccionClaves() :
         print('-----------------------')
         for c in clvs:
             print(c.id)
+    
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "INS_CLAVES")
+
+        idclaves = str(start())
+        dot.node(idclaves, "Claves")
+
+        idigual = str(start())
+        dot.node(idigual, "=")
+        
+        idcorchetea = str(start())
+        dot.node(idcorchetea, "[")
+
+        hijo = self.expresion.getNodos()
+
+        idcorchetec = str(start())
+        dot.node(idcorchetec, "]")        
+
+        dot.edge(idnodo, idclaves)
+        dot.edge(idnodo, idcorchetea)
+        dot.edge(idnodo, hijo)
+        dot.edge(idnodo, idcorchetec)
+
+        return idnodo
 
 class ListaClaves2() :
     def __init__(self, expresion, lista) :
@@ -244,6 +517,25 @@ class ListaClaves2() :
             if self.lista:
                 self.lista.ejecutar(entorno)
 
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "LISTA_CLAVES2")
+
+        if self.expresion:
+            ex = self.expresion.getNodos()
+
+            coma=str(start())
+            dot.node(coma,',')
+    
+            dot.edge(idnodo,ex)
+            dot.edge(idnodo,coma)
+            if self.lista:
+                hijo = self.lista.getNodos()
+                dot.edge(idnodo,hijo)
+
+        return idnodo
+
 class ListaClaves() :
     def __init__(self, expresion, lista) :
         self.expresion = expresion
@@ -256,6 +548,25 @@ class ListaClaves() :
             clvs.append(claves(self.expresion.getValor(entorno)))
             if self.lista:
                 self.lista.ejecutar(entorno)
+
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "LISTA_CLAVES")
+
+        if self.expresion:
+            ex = self.expresion.getNodos()
+
+            coma=str(start())
+            dot.node(coma,',')
+    
+            dot.edge(idnodo,ex)
+            dot.edge(idnodo,coma)
+            if self.lista:
+                hijo = self.lista.getNodos()
+                dot.edge(idnodo,hijo)
+
+        return idnodo
 
 class ListaValReg2() :
     def __init__(self, expresion, lista) :
@@ -270,6 +581,25 @@ class ListaValReg2() :
             if self.lista:
                 self.lista.ejecutar(entorno)
 
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "LISTA_VAL_REG2")
+
+        if self.expresion:
+            ex = self.expresion.getNodos()
+
+            coma=str(start())
+            dot.node(coma,',')
+    
+            dot.edge(idnodo,ex)
+            dot.edge(idnodo,coma)
+            if self.lista:
+                hijo = self.lista.getNodos()
+                dot.edge(idnodo,hijo)
+
+        return idnodo
+
 class ListaValReg() :
     def __init__(self, expresion, lista) :
         self.expresion = expresion
@@ -282,6 +612,32 @@ class ListaValReg() :
             regs.append(self.expresion.getValor(entorno))
             if self.lista:
                 self.lista.ejecutar(entorno)
+
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "LISTA_VAL_REG")
+
+        if self.expresion:
+            idllavea=str(start())
+            dot.node(idllavea,'{')
+
+            ex = self.expresion.getNodos()
+
+            coma=str(start())
+            dot.node(coma,',')
+            
+            dot.edge(idnodo,idllavea)
+            dot.edge(idnodo,ex)
+            dot.edge(idnodo,coma)
+            if self.lista:
+                hijo = self.lista.getNodos()
+                dot.edge(idnodo,hijo)
+
+        idllavec=str(start())
+        dot.node(idllavec,'}')
+        dot.edge(idnodo,idllavec)
+        return idnodo
 
 class ListaRegistros2() :
     def __init__(self, expresion, lista) :
@@ -296,6 +652,21 @@ class ListaRegistros2() :
             if self.lista:
                 self.lista.ejecutar(entorno)
 
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "LISTA_REGISTROS2")
+
+        if self.expresion:
+            val_reg=self.expresion.getNodos()
+            dot.edge(idnodo,val_reg)
+
+            if self.lista:
+                hijo = self.lista.getNodos()
+                dot.edge(idnodo,hijo)
+
+        return idnodo
+
 class ListaRegistros() :
     def __init__(self, expresion, lista) :
         self.expresion = expresion
@@ -309,6 +680,21 @@ class ListaRegistros() :
             if self.lista:
                 self.lista.ejecutar(entorno)
 
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "LISTA_REGISTROS")
+
+        if self.expresion:
+            val_reg=self.expresion.getNodos()
+            dot.edge(idnodo,val_reg)
+
+            if self.lista:
+                hijo = self.lista.getNodos()
+                dot.edge(idnodo,hijo)
+
+        return idnodo
+    
 class IntruccionRegistros() :
     def __init__(self, expresion) :
         self.expresion = expresion
@@ -338,6 +724,32 @@ class IntruccionRegistros() :
                     aux-=1
         return claves
 
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "INS_REGISTROS")
+
+        idreg = str(start())
+        dot.node(idreg, "registros")
+
+        idigual = str(start())
+        dot.node(idigual, "=")
+
+        idcorchetea = str(start())
+        dot.node(idcorchetea, "[")
+
+        hijo = self.expresion.getNodos()
+
+        idcorchetec = str(start())
+        dot.node(idcorchetec, "]")     
+
+        dot.edge(idnodo, idreg)
+        dot.edge(idnodo, idcorchetea)
+        dot.edge(idnodo, hijo)
+        dot.edge(idnodo, idcorchetec)
+
+        return idnodo
+
 class IntruccionImprimirln() :
     def __init__(self, expresion) :
         self.expresion = expresion
@@ -347,6 +759,32 @@ class IntruccionImprimirln() :
         valor = self.expresion.getValor(entorno)
         print(valor)
         consola+=str(valor)+'\n'
+    
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "INS_IMPRIMIRLN")
+
+        idconsole = str(start())
+        dot.node(idconsole, "imprimirln")
+
+        idpara = str(start())
+        dot.node(idpara, "(")
+
+        hijo = self.expresion.getNodos()
+
+        idparc = str(start())
+        dot.node(idparc, ")")
+
+        idpuntocoma = str(start())
+        dot.node(idpuntocoma, ";")        
+
+        dot.edge(idnodo, idconsole)
+        dot.edge(idnodo, idpara)
+        dot.edge(idnodo, hijo)
+        dot.edge(idnodo, idparc)
+        dot.edge(idnodo, idpuntocoma)
+        return idnodo
 
 class IntruccionImprimir() :
     def __init__(self, expresion) :
@@ -358,12 +796,48 @@ class IntruccionImprimir() :
         print(valor, end=' ')
         consola+=str(valor)
 
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "INS_IMPRIMIR")
+
+        idconsole = str(start())
+        dot.node(idconsole, "imprimir")
+
+        idpara = str(start())
+        dot.node(idpara, "(")
+
+        hijo = self.expresion.getNodos()
+
+        idparc = str(start())
+        dot.node(idparc, ")")
+
+        idpuntocoma = str(start())
+        dot.node(idpuntocoma, ";")        
+
+        dot.edge(idnodo, idconsole)
+        dot.edge(idnodo, idpara)
+        dot.edge(idnodo, hijo)
+        dot.edge(idnodo, idparc)
+        dot.edge(idnodo, idpuntocoma)
+        return idnodo
+
 class Instruccion() :
     def __init__(self, instruccion) :
         self.instruccion = instruccion
 
     def ejecutar(self, entorno):
         self.instruccion.ejecutar(entorno)
+
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "INSTRUCCION")
+
+        hijo = self.instruccion.getNodos()
+
+        dot.edge(idnodo, hijo)
+        return idnodo
 
 class ListaInstrucciones2() :
     def __init__(self, instruccion, lista) :
@@ -376,6 +850,18 @@ class ListaInstrucciones2() :
             if self.lista:
                 self.lista.ejecutar(entorno)
 
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "LISTA_INSTRUCCIONES2")
+        if self.instruccion:
+            hijo = self.instruccion.getNodos()
+            dot.edge(idnodo, hijo)
+            if self.lista:
+                hijo2 = self.lista.getNodos()
+                dot.edge(idnodo, hijo2)
+        return idnodo
+
 class ListaInstrucciones() :
     def __init__(self, instruccion, lista) :
         self.instruccion = instruccion
@@ -387,9 +873,45 @@ class ListaInstrucciones() :
             if self.lista:
                 self.lista.ejecutar(entorno)
 
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo, "LISTA_INSTRUCCIONES")
+        if self.instruccion:
+            hijo = self.instruccion.getNodos()
+            dot.edge(idnodo, hijo)
+            if self.lista:
+                hijo2 = self.lista.getNodos()
+                dot.edge(idnodo, hijo2)
+        return idnodo
+
+class InstruccionEOF():
+    def __init__(self):
+        pass
+
+    def ejecutar(self, entorno):
+        pass
+
+    def getNodos(self):
+        global dot
+
+        idnodo = str(start())
+        dot.node(idnodo, '$')
+
+        return idnodo
+
 class Inicio() :
     def __init__(self,lista) :
         self.lista = lista
 
     def ejecutar(self, entorno):
         self.lista.ejecutar(entorno)
+    
+    def getNodos(self):
+        global dot
+        idnodo = str(start())
+        dot.node(idnodo,'INICIO')
+        hijo = self.lista.getNodos()
+        dot.edge(idnodo, hijo)
+        dot.render()
+        return idnodo

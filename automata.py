@@ -344,7 +344,26 @@ class analizador_sintactico:
                     if self.listaTokens[self.i].tipo == 'corchetec' :
                         self.i += 1
                         return IntruccionRegistros(lista)
-
+                    else:
+                        linea = self.listaTokens[self.i].linea
+                        columna = self.listaTokens[self.i].columna
+                        self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                 
+                else:
+                    linea = self.listaTokens[self.i].linea
+                    columna = self.listaTokens[self.i].columna
+                    self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+          
+            else:
+                linea = self.listaTokens[self.i].linea
+                columna = self.listaTokens[self.i].columna
+                self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+    
+        else:
+            linea = self.listaTokens[self.i].linea
+            columna = self.listaTokens[self.i].columna
+            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+ 
     def val_cls(self):
         if self.listaTokens[self.i].tipo == 'cadena' :
             lexema = self.listaTokens[self.i].lexema.replace('"', '')
@@ -378,7 +397,26 @@ class analizador_sintactico:
                     if self.listaTokens[self.i].tipo == 'corchetec' :
                         self.i += 1
                         return IntruccionClaves(lista)
-
+                    else:
+                        linea = self.listaTokens[self.i].linea
+                        columna = self.listaTokens[self.i].columna
+                        self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                     
+                else:
+                    linea = self.listaTokens[self.i].linea
+                    columna = self.listaTokens[self.i].columna
+                    self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+               
+            else:
+                linea = self.listaTokens[self.i].linea
+                columna = self.listaTokens[self.i].columna
+                self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+             
+        else:
+            linea = self.listaTokens[self.i].linea
+            columna = self.listaTokens[self.i].columna
+            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+        
     def ins_imprimir(self):
         if self.listaTokens[self.i].tipo == 'imprimir':
             self.i += 1
@@ -392,7 +430,31 @@ class analizador_sintactico:
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
                             return IntruccionImprimir(c)
-    
+                        else:
+                            linea = self.listaTokens[self.i].linea
+                            columna = self.listaTokens[self.i].columna
+                            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                        
+                    else:
+                        linea = self.listaTokens[self.i].linea
+                        columna = self.listaTokens[self.i].columna
+                        self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+               
+                else:
+                    linea = self.listaTokens[self.i].linea
+                    columna = self.listaTokens[self.i].columna
+                    self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+             
+            else:
+                linea = self.listaTokens[self.i].linea
+                columna = self.listaTokens[self.i].columna
+                self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+             
+        else:
+            linea = self.listaTokens[self.i].linea
+            columna = self.listaTokens[self.i].columna
+            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+            
     def ins_imprimirln(self):
         if self.listaTokens[self.i].tipo == 'imprimirln':
             self.i += 1
@@ -406,6 +468,30 @@ class analizador_sintactico:
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
                             return IntruccionImprimirln(c)
+                        else:
+                            linea = self.listaTokens[self.i].linea
+                            columna = self.listaTokens[self.i].columna
+                            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                          
+                    else:
+                        linea = self.listaTokens[self.i].linea
+                        columna = self.listaTokens[self.i].columna
+                        self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                     
+                else:
+                    linea = self.listaTokens[self.i].linea
+                    columna = self.listaTokens[self.i].columna
+                    self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+               
+            else:
+                linea = self.listaTokens[self.i].linea
+                columna = self.listaTokens[self.i].columna
+                self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                 
+        else:
+            linea = self.listaTokens[self.i].linea
+            columna = self.listaTokens[self.i].columna
+            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
                                                 
     def ins_conteo(self):
         if self.listaTokens[self.i].tipo == 'conteo':
@@ -417,7 +503,26 @@ class analizador_sintactico:
                     if self.listaTokens[self.i].tipo == 'puntocoma':
                         self.i += 1
                         return IntruccionConteo()
-
+                    else:
+                        linea = self.listaTokens[self.i].linea
+                        columna = self.listaTokens[self.i].columna
+                        self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                     
+                else:
+                    linea = self.listaTokens[self.i].linea
+                    columna = self.listaTokens[self.i].columna
+                    self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                    
+            else:
+                linea = self.listaTokens[self.i].linea
+                columna = self.listaTokens[self.i].columna
+                self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                  
+        else:
+            linea = self.listaTokens[self.i].linea
+            columna = self.listaTokens[self.i].columna
+            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+            
     def ins_promedio(self):
         if self.listaTokens[self.i].tipo == 'promedio':
             self.i += 1
@@ -431,7 +536,31 @@ class analizador_sintactico:
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
                             return IntruccionPromedio(c)
-
+                        else:
+                            linea = self.listaTokens[self.i].linea
+                            columna = self.listaTokens[self.i].columna
+                            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                          
+                    else:
+                        linea = self.listaTokens[self.i].linea
+                        columna = self.listaTokens[self.i].columna
+                        self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                     
+                else:
+                    linea = self.listaTokens[self.i].linea
+                    columna = self.listaTokens[self.i].columna
+                    self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                    
+            else:
+                linea = self.listaTokens[self.i].linea
+                columna = self.listaTokens[self.i].columna
+                self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                 
+        else:
+            linea = self.listaTokens[self.i].linea
+            columna = self.listaTokens[self.i].columna
+            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+         
     def ins_contarsi(self):
         if self.listaTokens[self.i].tipo == 'contarsi':
             self.i += 1
@@ -450,7 +579,41 @@ class analizador_sintactico:
                                 if self.listaTokens[self.i].tipo == 'puntocoma':
                                     self.i += 1
                                     return IntruccionContarsi(c,n)
-
+                                else:
+                                    linea = self.listaTokens[self.i].linea
+                                    columna = self.listaTokens[self.i].columna
+                                    self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                                 
+                            else:
+                                linea = self.listaTokens[self.i].linea
+                                columna = self.listaTokens[self.i].columna
+                                self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                       
+                        else:
+                            linea = self.listaTokens[self.i].linea
+                            columna = self.listaTokens[self.i].columna
+                            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                           
+                    else:
+                        linea = self.listaTokens[self.i].linea
+                        columna = self.listaTokens[self.i].columna
+                        self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                       
+                else:
+                    linea = self.listaTokens[self.i].linea
+                    columna = self.listaTokens[self.i].columna
+                    self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                   
+            else:
+                linea = self.listaTokens[self.i].linea
+                columna = self.listaTokens[self.i].columna
+                self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                  
+        else:
+            linea = self.listaTokens[self.i].linea
+            columna = self.listaTokens[self.i].columna
+            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+         
     def ins_datos(self):
         if self.listaTokens[self.i].tipo == 'datos':
             self.i += 1
@@ -461,6 +624,25 @@ class analizador_sintactico:
                     if self.listaTokens[self.i].tipo == 'puntocoma':
                         self.i += 1
                         return IntruccionDatos()
+                    else:
+                        linea = self.listaTokens[self.i].linea
+                        columna = self.listaTokens[self.i].columna
+                        self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                  
+                else:
+                    linea = self.listaTokens[self.i].linea
+                    columna = self.listaTokens[self.i].columna
+                    self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+             
+            else:
+                linea = self.listaTokens[self.i].linea
+                columna = self.listaTokens[self.i].columna
+                self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+             
+        else:
+            linea = self.listaTokens[self.i].linea
+            columna = self.listaTokens[self.i].columna
+            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
 
     def ins_sumar(self):
         if self.listaTokens[self.i].tipo == 'sumar':
@@ -475,7 +657,31 @@ class analizador_sintactico:
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
                             return IntruccionSumar(c)
-
+                        else:
+                            linea = self.listaTokens[self.i].linea
+                            columna = self.listaTokens[self.i].columna
+                            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+               
+                    else:
+                        linea = self.listaTokens[self.i].linea
+                        columna = self.listaTokens[self.i].columna
+                        self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                   
+                else:
+                    linea = self.listaTokens[self.i].linea
+                    columna = self.listaTokens[self.i].columna
+                    self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                 
+            else:
+                linea = self.listaTokens[self.i].linea
+                columna = self.listaTokens[self.i].columna
+                self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+              
+        else:
+            linea = self.listaTokens[self.i].linea
+            columna = self.listaTokens[self.i].columna
+            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                              
     def ins_max(self):
         if self.listaTokens[self.i].tipo == 'maximo':
             self.i += 1
@@ -489,7 +695,31 @@ class analizador_sintactico:
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
                             return IntruccionMax(c)
-    
+                        else:
+                            linea = self.listaTokens[self.i].linea
+                            columna = self.listaTokens[self.i].columna
+                            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                           
+                    else:
+                        linea = self.listaTokens[self.i].linea
+                        columna = self.listaTokens[self.i].columna
+                        self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                       
+                else:
+                    linea = self.listaTokens[self.i].linea
+                    columna = self.listaTokens[self.i].columna
+                    self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                    
+            else:
+                linea = self.listaTokens[self.i].linea
+                columna = self.listaTokens[self.i].columna
+                self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                   
+        else:
+            linea = self.listaTokens[self.i].linea
+            columna = self.listaTokens[self.i].columna
+            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+            
     def ins_min(self):
         if self.listaTokens[self.i].tipo == 'minimo':
             self.i += 1
@@ -503,7 +733,31 @@ class analizador_sintactico:
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
                             return IntruccionMin(c)
-
+                        else:
+                            linea = self.listaTokens[self.i].linea
+                            columna = self.listaTokens[self.i].columna
+                            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                            
+                    else:
+                        linea = self.listaTokens[self.i].linea
+                        columna = self.listaTokens[self.i].columna
+                        self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                      
+                else:
+                    linea = self.listaTokens[self.i].linea
+                    columna = self.listaTokens[self.i].columna
+                    self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                   
+            else:
+                linea = self.listaTokens[self.i].linea
+                columna = self.listaTokens[self.i].columna
+                self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                   
+        else:
+            linea = self.listaTokens[self.i].linea
+            columna = self.listaTokens[self.i].columna
+            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+            
     def ins_reporte(self):
         if self.listaTokens[self.i].tipo == 'reporte':
             self.i += 1
@@ -517,7 +771,31 @@ class analizador_sintactico:
                         if self.listaTokens[self.i].tipo == 'puntocoma':
                             self.i += 1
                             return IntruccionReporte(c)
-
+                        else:
+                            linea = self.listaTokens[self.i].linea
+                            columna = self.listaTokens[self.i].columna
+                            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                           
+                    else:
+                        linea = self.listaTokens[self.i].linea
+                        columna = self.listaTokens[self.i].columna
+                        self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                        
+                else:
+                    linea = self.listaTokens[self.i].linea
+                    columna = self.listaTokens[self.i].columna
+                    self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                   
+            else:
+                linea = self.listaTokens[self.i].linea
+                columna = self.listaTokens[self.i].columna
+                self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+                  
+        else:
+            linea = self.listaTokens[self.i].linea
+            columna = self.listaTokens[self.i].columna
+            self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
+            
     def instruccion(self):
         if self.listaTokens[self.i].tipo == 'registros' :
             i = self.ins_registros()
@@ -560,13 +838,15 @@ class analizador_sintactico:
             columna = self.listaTokens[self.i].columna
             self.listaErrores.append(error(self.listaTokens[self.i].lexema,'Sintactico', linea, columna))   
             self.i+=1
-            self.instruccion()
-            self.lista_instrucciones2()
-    
+            
+    def ins_eof(self):
+        return InstruccionEOF()
+
     def lista_instrucciones2(self):
         if self.listaTokens[self.i].tipo == 'EOF' :
             print('analisis sintactico exitoso')
-            return None
+            eof=self.ins_eof()
+            return ListaInstrucciones2(eof,[])
         else:
             i = self.instruccion()
             lista2 = self.lista_instrucciones2()
@@ -587,20 +867,12 @@ class analizador_sintactico:
         self.listaTokens = listaTokens
         self.listaErrores = listaErrores
         arbol = self.inicio()
-        arbol.ejecutar({})
+        if len(self.listaErrores)==0: 
+            arbol.ejecutar({})
+            arbol.getNodos()
+        else:
+            global consola
+            for e in self.listaErrores:
+                consola+='Error: '+e.tipo+' de: '+e.caracter+' En linea: '+str(e.linea)+' Columna: '+str(e.columna)+'\n'
+            print(consola)
         print()
-
-
-
-if __name__ == '__main__':
-    ruta="prueba.lfp"
-    archivo=open(ruta,'r')
-    file =archivo.read()
-    archivo.close()
-    a_lexico=analizador_lexico()
-    a_lexico.analizar(file)
-    a_sintactico=analizador_sintactico()
-    a_sintactico.analizar(a_lexico.tokens,a_lexico.errores)
-    a_lexico.html_E()
-    
-

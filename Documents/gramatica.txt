@@ -1,0 +1,77 @@
+INICIO = LISTA_INSTRUCCIONES
+
+LISTA_INSTRUCCIONES = INSTRUCCION LISTA_INSTRUCCIONES2
+
+LISTA_INSTRUCCIONES2 = INSTRUCCION LISTA_INSTRUCCIONES2
+                    | EOF ($)
+
+INSTRUCCION = INS_CLAVES                
+            |INS_REGISTRO               
+            |INS_IMPRIMIR               
+            |INS_IMPRIMIRLN             
+            |INS_CONTEO                 
+            |INS_CONTARSI              
+            |INS_PROMEDIO               
+            |INS_DATOS                  
+            |INS_SUMAR                  
+            |INS_MAXIMO                    
+            |INS_MINIMO                    
+            |INS_REPORTEE       
+
+INS_REGISTRO = registros igual corchetea LISTA_REGISTROS corchetec
+
+LISTA_REGISTROS = REGISTRO LISTA_REGISTROS2
+
+LISTA_REGISTROS2 = REGISTRO LISTA_REGISTROS2
+                    |EPSILON (], corchetec)
+
+REGISTRO = llavea LISTA_VAL_REG llavec
+
+LISTA_VAL_REG = VAL_REG LISTA_VAL_REG2
+
+LISTA_VAL_REG2 = VAL_REG LISTA_VAL_REG2
+                |EPSILON (}, llavec)
+
+VAL_REG = cadena
+        |entero
+        |decimal
+
+
+INS_CLAVES = claves igual corchetea LISTA_CLAVES corchetec
+
+LISTA_CLAVES = VAL_CLS LISTA_CLAVES2
+
+LISTA_CLAVES2 = coma VAL_CLS LISTA_CLAVES2
+
+VAL_CLS = cadena
+
+
+
+INS_IMPRIMIR = imprimir parentesisa cadena parentesisc puntocoma
+
+
+INS_IMPRIMIRLN = imprimirln parentesisa cadena parentesisc puntocoma
+
+
+INS_DATOS = datos parentesisa parentesisc puntocoma
+
+
+INS_CONTEO = datos parentesisA parentesisC PuntoyComa
+
+
+INS_PROMEDIO = promedio parentesisa cadena parentesisc puntocoma
+
+
+INS_MAX = maximo parentesisa cadena parentesisc puntocoma
+
+
+INS_MIN = minimo parentesisa cadena parentesisc puntocoma
+
+
+INS_SUMAR = sumar parentesisa cadena parentesisc puntocoma
+
+
+INS_REPORTE = reporte parentesisa cadena parentesisc puntocoma
+
+
+INS_CONTAR_SI = contarsi parentesisa cadena coma entero parentesisc puntocoma

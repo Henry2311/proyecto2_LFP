@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox,QFileDialog
 from automata import *
+from os import startfile
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -112,7 +113,10 @@ class Ui_MainWindow(object):
             self.sintactico.analizar(self.lexico.tokens,self.lexico.errores)
             from arbol import consola
             self.textBrowser.setPlainText(consola)
-           
+            self.lexico.del_from_token()
+            self.lexico.html_T()
+            self.lexico.html_E()
+            
     def reportes(self):
         archivo = self.plainTextEdit.toPlainText()
         if archivo == '':
@@ -122,17 +126,11 @@ class Ui_MainWindow(object):
             msj.exec()
         else:
             if self.pushButton_3.currentText() == 'Reporte de Tokens':
-                self.lexico.del_from_token()
-                self.lexico.html_T()
+                startfile('Reporte_Tokens.html')
             elif self.pushButton_3.currentText() == 'Reporte de Errores':
-                self.lexico.html_E()
+                startfile('Reporte_Errores.html')
             elif self.pushButton_3.currentText() == 'Arbol de Derivacion':
-                msj = QMessageBox()
-                msj.setWindowTitle('Error')
-                msj.setText('AUN NO HAGO EL ARBOL XD')
-                msj.exec()
-
-
+                startfile('arbol.gv.pdf')
 
 if __name__ == "__main__":
     import sys

@@ -17,13 +17,13 @@ reporte             palabra exportarReporte             azul
 
 llavea              caracter llave que abre             rosado
 llavec              caracter llave que cierra           rosado
-corchetea	        caracter corchete que abre          rosado
-corchetec	        caracter corchete que cierra   	    rosado
+corchetea	    caracter corchete que abre          rosado
+corchetec	    caracter corchete que cierra   	rosado
 parentesisa         caracter parentesis que abre        rosado
 parentesisc         caracter parentesis que cierra      rosado
 puntocoma           caracter punto y coma               rosado
 coma                caracter coma                       rosado
-igual		        caracter simbolo igual      	    rosado
+igual		    caracter simbolo igual      	rosado
 
 
 cadena              inicia y termina con "              verde
